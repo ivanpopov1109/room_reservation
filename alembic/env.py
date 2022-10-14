@@ -1,4 +1,9 @@
 import asyncio
+from logging.config import fileConfig
+
+from app.core.base import Base
+
+# Импортируем модель переговорки.
 
 # Импортируем модуль стандартной библиотеки для работы с ОС.
 import os
@@ -32,9 +37,12 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
+# Присвоим переменной target_metadata объект класса MetaData из Base.
+target_metadata = Base.metadata
+
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+# target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -66,7 +74,7 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection: Connection) -> None:
+def do_run_migrations(connection) -> None:
     context.configure(connection=connection, target_metadata=target_metadata)
 
     with context.begin_transaction():
