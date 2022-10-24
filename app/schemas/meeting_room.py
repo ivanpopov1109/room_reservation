@@ -1,7 +1,7 @@
 
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 # Базовый класс схемы, от которого наследуем все остальные.
@@ -22,7 +22,16 @@ class MeetingRoomCreate(MeetingRoomBase):
 class MeetingRoomDB(MeetingRoomCreate):
     id: int
 #Чтобы FastAPI мог сериализовать объект ORM-модели в схему MeetingRoomDB, нужно указать,
-# что схема может принимать на вход объект базы данных, а не только Python-словарь или JSON-объект.Для этого в подклассе Config устанавливается атрибут
+# что схема может принимать на вход объект базы данных, а не только Python-словарь или JSON-объект.Для этого в подклассе
+# Config устанавливается атрибут
     class Config:
         orm_mode = True
+
+class MeetingRoomUpdate(MeetingRoomBase):
+    @validator('name')
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Имя переговорки не может быть пустым!')
+        return value
+
 
