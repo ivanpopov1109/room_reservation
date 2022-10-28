@@ -13,4 +13,6 @@ class MeetingRoom(Base):
     # Установите связь между моделями через функцию relationship.
     reservations = relationship('Reservation', cascade='delete')
 
+    def __repr__(self):
+        return f'(name = {self.name}, desc = {self.description})'
 
