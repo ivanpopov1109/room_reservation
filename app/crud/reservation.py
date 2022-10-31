@@ -1,5 +1,5 @@
 from app.crud.base import CRUDBase
-from app.models.reservation import Reservation
+from app.models import Reservation, User
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import and_, between, or_, select
@@ -30,5 +30,9 @@ class CRUDReseration(CRUDBase):
         reservations = reservations.scalars().all()
         print(type(reservations))
         return reservations
+
+    async def get_by_user(self, user: User, session: AsyncSession) -> list[Reservation]:
+        reservations = await session.execute(select(Reservation).where(Reservation.user_id == user.id))
+        return reservations.scalar().all()
 
 reservation_crud = CRUDReseration(Reservation)
